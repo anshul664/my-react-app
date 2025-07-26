@@ -1,8 +1,11 @@
+import './resizeObserverPolyfill';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+// ResizeObserver polyfill is now handled in resizeObserverPolyfill.js
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
