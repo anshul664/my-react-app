@@ -226,24 +226,6 @@ function App() {
               <div style={{ display: 'flex', width: '100vw', height: '100vh' }}>
           <Sidebar onDragStart={setDragData} />
           <div style={{ flex: 1, position: 'relative' }}>
-          <div style={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            zIndex: 10,
-            background: 'rgba(255, 255, 255, 0.9)',
-            padding: '10px',
-            borderRadius: '8px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-            fontSize: '14px'
-          }}>
-            <h3 style={{ margin: '0 0 10px 0', color: '#333' }}>React Flow Diagram</h3>
-            <div style={{ color: '#666', fontSize: '12px' }}>
-              <div>• Drag nodes from sidebar to add them</div>
-              <div>• Connect nodes by dragging from handles</div>
-              <div>• Root (Red) → Org Unit (Teal) → Course List (Green) → User List (Blue)</div>
-            </div>
-          </div>
           <ReactFlow
             nodes={nodes}
             edges={edges}
