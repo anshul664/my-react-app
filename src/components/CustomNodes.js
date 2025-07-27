@@ -316,3 +316,95 @@ export {
   UserListNode, 
   CourseListNode
 }; 
+
+export function OptionalCourseStudentListNode({ data, id }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(data.label);
+  const inputRef = useRef(null);
+
+  // Update editValue when data.label changes
+  useEffect(() => {
+    setEditValue(data.label);
+  }, [data.label]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+    setEditValue(data.label);
+  };
+
+  const handleSave = () => {
+    if (editValue.trim()) {
+      console.log('Saving new label:', editValue.trim());
+      if (data.onChange) {
+        data.onChange(id, editValue.trim());
+      } else {
+        console.log('onChange function not found!');
+      }
+    }
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    } else if (e.key === 'Escape') {
+      setIsEditing(false);
+      setEditValue(data.label);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const newValue = e.target.value;
+    setEditValue(newValue);
+    // Update the node label in real-time as you type
+    if (data.onChange) {
+      data.onChange(id, newValue);
+    }
+  };
+
+  return (
+    <div style={{
+      border: '2px solid purple',
+      background: '#f3e6ff',
+      borderRadius: 8,
+      padding: 10,
+      minWidth: 120,
+      color: '#6c2eb6',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    }}>
+      <Handle type="target" position={Position.Top} />
+      {isEditing ? (
+        <input
+          ref={inputRef}
+          type="text"
+          value={editValue}
+          onChange={handleInputChange}
+          onBlur={handleSave}
+          onKeyDown={handleKeyDown}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: '#6c2eb6',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 'inherit',
+            width: '100%',
+            outline: 'none'
+          }}
+        />
+      ) : (
+        <div onDoubleClick={handleDoubleClick} style={{ cursor: 'pointer' }}>
+          {data.label || 'Optional Course Student List'}
+        </div>
+      )}
+    </div>
+  );
+} 

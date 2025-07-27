@@ -15,7 +15,8 @@ import {
   CustomRootNode, 
   OrgUnitNode, 
   UserListNode, 
-  CourseListNode
+  CourseListNode,
+  OptionalCourseStudentListNode
 } from './components/CustomNodes';
 import ErrorBoundary from './components/ErrorBoundary';
 import Sidebar from './components/Sidebar';
@@ -142,8 +143,8 @@ function App() {
     }
 
     // Only prevent multiple parents for nodes that should have only one parent
-    // Course List can have multiple parents (not included in this check)
-    if ((targetNode.type === 'orgUnit' || targetNode.type === 'userList') &&
+    // OptionalCourseStudentList can have multiple parents (not included in this check)
+    if ((targetNode.type === 'orgUnit' || targetNode.type === 'userList' || targetNode.type === 'courseList') &&
         edges.some((e) => e.target === targetNode.id)) {
       alert("❌ Node already has a parent.");
       return;
@@ -213,6 +214,7 @@ function App() {
     orgUnit: OrgUnitNode,
     userList: UserListNode,
     courseList: CourseListNode,
+    optionalCourseStudentList: OptionalCourseStudentListNode,
   };
 
   return (

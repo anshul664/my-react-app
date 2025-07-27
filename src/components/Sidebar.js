@@ -36,6 +36,12 @@ const Sidebar = ({ onDragStart }) => {
       label: 'Course List',
       color: '#96ceb4',
       description: 'Can be parent or child'
+    },
+    {
+      type: 'optionalCourseStudentList',
+      label: 'Optional Course Student List',
+      color: '#a259e6',
+      description: 'Can only be a child (can have multiple parents)'
     }
   ];
 

@@ -23,6 +23,12 @@ export const initialNodes = [
     position: { x: 600, y: 150 },
     data: { label: 'Courses List' },
   },
+  {
+    id: 'optional-course-student-list-1',
+    type: 'optionalCourseStudentList',
+    position: { x: 400, y: 400 },
+    data: { label: 'Optional Course Student List' },
+  },
 ];
 
 export const initialEdges = [];
