@@ -106,6 +106,41 @@ function App() {
       return;
     }
 
+    // Enforce only one root node per connected structure
+    if (sourceNode.type === 'root') {
+      // Find all nodes in the connected component of the target node (traverse upwards via edges)
+      const visited = new Set();
+      const stack = [params.target];
+      while (stack.length > 0) {
+        const currentId = stack.pop();
+        if (!visited.has(currentId)) {
+          visited.add(currentId);
+          // Find all parents of currentId
+          edges.forEach((e) => {
+            if (e.target === currentId) {
+              stack.push(e.source);
+            }
+          });
+        }
+      }
+      // For all nodes in the component, check if any has a root node as a parent
+      let hasRootParentInComponent = false;
+      visited.forEach((nodeId) => {
+        edges.forEach((e) => {
+          if (e.target === nodeId) {
+            const parentNode = nodes.find((n) => n.id === e.source);
+            if (parentNode && parentNode.type === 'root') {
+              hasRootParentInComponent = true;
+            }
+          }
+        });
+      });
+      if (hasRootParentInComponent) {
+        alert('❌ This structure already has a root node as a parent.');
+        return;
+      }
+    }
+
     // Only prevent multiple parents for nodes that should have only one parent
     // Course List can have multiple parents (not included in this check)
     if ((targetNode.type === 'orgUnit' || targetNode.type === 'userList') &&
@@ -117,19 +152,6 @@ function App() {
     if (sourceNode.type === 'userList') {
       alert("❌ User List cannot be a parent.");
       return;
-    }
-
-    if (sourceNode.type === 'orgUnit') {
-      const siblings = edges
-        .filter((e) => e.source === sourceNode.id)
-        .map((e) => nodes.find((n) => n.id === e.target));
-      const isDuplicate = siblings.some(
-        (n) => n?.data?.label === targetNode?.data?.label
-      );
-      if (isDuplicate) {
-        alert("❌ Cannot have children with the same name.");
-        return;
-      }
     }
 
     setEdges((eds) => addEdge(params, eds));
@@ -214,27 +236,6 @@ function App() {
               <div>• Drag nodes from sidebar to add them</div>
               <div>• Connect nodes by dragging from handles</div>
               <div>• Root (Red) → Org Unit (Teal) → Course List (Green) → User List (Blue)</div>
-              <div style={{ marginTop: '10px' }}>
-                <button 
-                  onClick={() => {
-                    const testNode = nodes.find(n => n.type === 'orgUnit');
-                    if (testNode) {
-                      onNodeLabelChange(testNode.id, 'TEST RENAME ' + Date.now());
-                    }
-                  }}
-                  style={{
-                    padding: '5px 10px',
-                    fontSize: '12px',
-                    backgroundColor: '#007bff',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Test Rename
-                </button>
-              </div>
             </div>
           </div>
           <ReactFlow
