@@ -209,6 +209,10 @@ function App() {
     }
   };
 
+  const handleRename = (nodeId, newLabel) => {
+    onNodeLabelChange(nodeId, newLabel);
+  };
+
   const nodeTypes = {
     root: CustomRootNode,
     orgUnit: OrgUnitNode,
@@ -286,6 +290,9 @@ function App() {
               onClose={() => setContextMenu(null)}
               onDelete={deleteNode}
               nodeType={contextMenu.nodeType}
+              nodeId={contextMenu.nodeId}
+              onRename={handleRename}
+              currentNodeLabel={nodes.find(n => n.id === contextMenu.nodeId)?.data?.label}
             />
           )}
         </div>
